@@ -1,10 +1,16 @@
 require("dotenv"). config(); 
-const port = process.env.port;
+const PORT = process.env.PORT || 3000;
 
 const express = require('express');
 const app = express()
-app.use(express.json()); // middleware to log requests
+app.use(express.json()); 
 
+// middleware to log requests
+app.use((req, res, next) => {
+console.log(`${req.method} ${req.url}`);
+next();
+
+});
 //GET
 app.get('/', (req, res) => res.send('My Week 2 API!'));
 
@@ -17,11 +23,11 @@ app.post('/user', (req, res) => {
     
     console.log (req.body);
 
-    res.status(201).json({message: `Hello, ${name})`})
+    res.status(201).json({message: `Hello, ${name}`})
 });
 // GET/user/:id
 app.get('/user/:id', (req, res) => {
-    res.json({ id: req.params.id, name: 'User profile'});
-})
+    res.json({ id: req.params.id, name: `User ${req.params.id}'s profile`});
+});
 
-app.listen(3000, () => console.log ('API live on port 3000'));
+app.listen(PORT, () => console.log (`API live on port ${PORT}`));
